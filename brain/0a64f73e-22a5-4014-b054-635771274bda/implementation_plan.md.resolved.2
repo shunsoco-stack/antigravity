@@ -1,0 +1,27 @@
+# Implementation Plan - UI Refinements
+
+The user wants to move the search bar to the top of the main area (removing it from the sidebar) and add tooltips explaining PER and PBR.
+
+## Proposed Changes
+
+### UI
+#### [MODIFY] [app.py](file:///c:/Users/shunk/.gemini/antigravity/scratch/stock_tool/app.py)
+- **Layout Change**:
+    - Remove `with st.sidebar:` block.
+    - Move `input_tickers`, `st.expander` (for filters), and `search_button` to the main area, below the title/description.
+    - Use `st.container` or keep it linear as it's "at the top".
+- **Tooltips**:
+    - Add `help="..."` parameter to `st.number_input` for PER (Min/Max) and PBR (Min/Max).
+    - **Content**:
+        - **PER**: "Price Earnings Ratio（株価収益率）。株価が1株当たり純利益の何倍まで買われているかを示します。一般的に15倍以下が割安と言われます。"
+        - **PBR**: "Price Book-value Ratio（株価純資産倍率）。株価が1株当たり純資産の何倍まで買われているかを示します。1倍以下は解散価値より割安と言われます。"
+
+## Verification Plan
+
+### Manual Verification
+1.  **Layout**:
+    - Open app. Verify "Search Settings" and "Filters" are in the center/top, not sidebar.
+    - Verify sidebar is empty or gone.
+2.  **Tooltips**:
+    - Hover over the "?" next to PER and PBR inputs.
+    - Confirm the Japanese explanation text appears.

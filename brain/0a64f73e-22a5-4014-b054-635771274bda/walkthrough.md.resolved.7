@@ -1,0 +1,68 @@
+# Walkthrough - Fetch All Stocks Feature
+
+I have implemented the ability to fetch all listed companies on the Tokyo Stock Exchange (JPX) when no specific ticker code is provided in the tool.
+
+## Changes
+
+### 1. JPX List Retrieval ([stock_tool.py](file:///c:/Users/shunk/.gemini/antigravity/scratch/stock_tool/stock_tool.py))
+- Added [get_all_jpx_tickers()](file:///c:/Users/shunk/.gemini/antigravity/scratch/stock_tool/stock_tool.py#6-39) function.
+- This function downloads the official listed company list (Excel format) from the JPX website.
+- It parses the Excel file to extract stock codes and formats them for `yfinance` (e.g., `7203.T`).
+
+### 2. Web Interface Update ([app.py](file:///c:/Users/shunk/.gemini/antigravity/scratch/stock_tool/app.py))
+- Modified the main logic to check if the input field is empty when "情報取得" (Get Info) is clicked.
+- If empty, it triggers the "Fetch All" mode:
+    - Displays a warning about the processing time.
+    - Downloads the stock list (approx. 4000 companies).
+    - Iterates through the list to fetch data (showing a progress bar).
+
+### 3. Dependencies
+- Added `openpyxl` and `xlrd` to [requirements.txt](file:///c:/Users/shunk/.gemini/antigravity/scratch/stock_tool/requirements.txt) to support reading the JPX Excel file.
+
+## Verification Results
+
+### Automatic Fetch Test
+I verified that the tool can successfully download and parse the JPX list:
+```
+Fetching JPX data...
+Found 4437 tickers.
+First 5: ['1301.T', '1302.T', '1305.T', '1306.T', '1308.T']
+```
+
+## How to Run
+1.  **Web App**:
+    - Run the app: `streamlit run app.py` (or through the main menu if set up).
+    - Leave the text area **empty**.
+    - Click "情報取得".
+    - Confirm it starts processing (progress bar appears).
+
+2.  **CLI**:
+    - Run `python stock_tool.py` without arguments.
+    - It will prompt: `Do you want to fetch ALL JPX stocks? ... (y/n):`
+    - Enter `y` to proceed.
+
+## Search Filters & Screener
+
+The tool now functions as a dedicated stock screener. It fetches the full list of JPX stocks and filters them based on your criteria.
+
+-   **PER (Price Earnings Ratio)**: Set minimum and maximum values.
+-   **PBR (Price Book-value Ratio)**: Set minimum and maximum values.
+-   **Dividend Yield (%)**: Set minimum and maximum percentage (e.g., Min 3.0 for 3% or higher).
+
+-   **Dividend Yield (%)**: Set minimum and maximum percentage (e.g., Min 3.0 for 3% or higher).
+
+**Note**: If a filter is set to 0 (default), it is treated as "no limit".
+**Important**: When a filter is active (Min or Max set), stocks with **missing data** (None) for that indicator are automatically **excluded**. For example, setting "Max Dividend 4%" will exclude stocks with unknown dividend yield.
+
+## UI Refinements
+
+-   **Simplified Interface**: The stock code input has been removed. The tool always screens against **all listed companies**.
+-   **Filters**: The filter settings are always visible at the top of the screen.
+    - Minimum and Maximum inputs are now arranged side-by-side for easier comparison and compact display.
+-   **Tooltips**: Hovering over the `?` icon next to PER, PBR, and Dividend Yield inputs will display an explanation of each indicator.
+
+## Usage Note
+
+-   **Processing Time**: The tool scans the entire JPX list (approx. 4000 companies). This takes a significant amount of time.
+-   **Progress Feedback**: The tool now displays "Scanning: [Ticker] ... Found: [Matches]" in real-time.
+-   **Real-time Results**: The result table is updated immediately whenever a matching stock is found, so you don't have to wait for the entire scan to finish to see the first hits.

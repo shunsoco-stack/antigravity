@@ -1,0 +1,31 @@
+# Implementation Plan - Search Filters
+
+The user wants to filter stocks by PER, PBR, and Dividend Yield.
+This will be implemented in the Web UI ([app.py](file:///c:/Users/shunk/.gemini/antigravity/scratch/stock_tool/app.py)).
+
+## Proposed Changes
+
+### UI
+#### [MODIFY] [app.py](file:///c:/Users/shunk/.gemini/antigravity/scratch/stock_tool/app.py)
+- **Sidebar**: Add "Advanced Filters" (詳細検索) expander.
+    - **PER**: Min/Max number inputs (Step 0.1).
+    - **PBR**: Min/Max number inputs (Step 0.01).
+    - **Dividend Yield (%)**: Min/Max number inputs (Step 0.1).
+- **Processing Logic**:
+    - Inside the main loop (where [get_stock_info](file:///c:/Users/shunk/.gemini/antigravity/scratch/stock_tool/stock_tool.py#40-79) gets data):
+    - Add a check `is_match(data, filters)` function (or inline).
+    - If a stock does not meet criteria, valid `data` is NOT added to `results`.
+    - **Note**: `yfinance` returns Dividend Yield as decimal (0.03 = 3%), so UI input (e.g., 3%) needs to be converted or compared correctly.
+
+## Verification Plan
+
+### Manual Verification
+1.  **Filter Logic**:
+    - Input Tickers: `7203` (Toyota), `6758` (Sony).
+    - Set Filter: PER < 5 (Unlikely to match both).
+    - Verify: Result is empty or filters out one.
+    - Set Filter: PER < 100 (Likely matches both).
+    - Verify: Both appear.
+2.  **Dividend Yield**:
+    - Set Min Yield: 2.0%.
+    - Verify stocks with < 2% are excluded.

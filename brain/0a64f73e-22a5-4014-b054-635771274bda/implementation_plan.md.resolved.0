@@ -1,0 +1,45 @@
+# Implementation Plan - Fetch All Stocks Feature
+
+The user wants to fetch and display information for *all* stocks when no specific code is provided.
+To achieve this, we will use the official JPX (Japan Exchange Group) listed company list.
+
+## User Review Required
+> [!WARNING]
+> Fetching data for all ~4000 listed companies using `yfinance` (which fetches sequentially or with limited concurrency) will be extremely slow (potential usage limits or IP bans).
+> I will implement the logic to fetch the list, but I will default to a warning/confirmation or process them; however, be aware of the performance implication.
+> The tool currently fetches `Ticker.info` which requires 1 HTTP request per stock.
+
+## Proposed Changes
+
+### Configuration
+#### [MODIFY] [requirements.txt](file:///c:/Users/shunk/.gemini/antigravity/scratch/stock_tool/requirements.txt)
+- Add `openpyxl` to support reading the JPX Excel list.
+
+### Backend Logic
+#### [MODIFY] [stock_tool.py](file:///c:/Users/shunk/.gemini/antigravity/scratch/stock_tool/stock_tool.py)
+- Import `pandas`.
+- Add a function `get_all_jpx_tickers()`:
+    - Download the JPX data_j.xls (using `pd.read_excel` with the URL).
+    - Extract the 'Code' column.
+    - Format codes (append '.T').
+    - Return a list of codes and names.
+
+### UI
+#### [MODIFY] [app.py](file:///c:/Users/shunk/.gemini/antigravity/scratch/stock_tool/app.py)
+- Logic update in [main](file:///c:/Users/shunk/.gemini/antigravity/scratch/stock_tool/stock_tool.py#46-99):
+    - If `input_tickers` is empty (and button is clicked):
+        - Call `get_all_jpx_tickers()` to get the list.
+        - Show a warning about the number of items.
+        - Proceed to fetch data using the existing loop (with the progress bar).
+
+## Verification Plan
+
+### Automated Tests
+- None (This is a script-based tool).
+
+### Manual Verification
+1.  **Empty Input**: Left the text area empty and click "情報取得" (Get Info).
+    - Verify that the app starts fetching the list of Tickers (showing a spinner or status).
+    - Verify that it starts iterating through the stocks (progress bar updates).
+    - **Stop** the process early if it works (as it will take too long), but confirm it handled "Empty" as "All".
+2.  **Specific Input**: Input "7203" and verify it still works as before.

@@ -1,0 +1,5 @@
+{
+  "artifactType": "ARTIFACT_TYPE_IMPLEMENTATION_PLAN",
+  "summary": "Add --web flag to stock_tool.py to launch the existing Streamlit app.",
+  "updatedAt": "2026-01-17T03:54:17.843219Z"
+}

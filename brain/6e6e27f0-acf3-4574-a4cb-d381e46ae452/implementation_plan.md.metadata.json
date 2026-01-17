@@ -1,0 +1,5 @@
+{
+  "artifactType": "ARTIFACT_TYPE_IMPLEMENTATION_PLAN",
+  "summary": "日本株情報取得ツールの実装計画。Pythonとyfinanceを使用した手軽なCLIツールを提案。ユーザー入力に基づいて株価情報を取得し、コンソール表示およびCSV出力を可能にする。",
+  "updatedAt": "2026-01-15T15:59:05.309799100Z"
+}

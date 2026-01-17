@@ -1,0 +1,6 @@
+{
+  "artifactType": "ARTIFACT_TYPE_IMPLEMENTATION_PLAN",
+  "summary": "Plan to convert the tool into a stock screener by removing manual input and exposing filters.",
+  "updatedAt": "2026-01-17T04:41:17.024975500Z",
+  "version": "3"
+}

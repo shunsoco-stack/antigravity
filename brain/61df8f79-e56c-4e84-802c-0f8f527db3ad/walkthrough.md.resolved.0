@@ -1,0 +1,37 @@
+# ETF Filter Implementation Walkthrough
+
+I have implemented a filter to exclude ETFs from the stock screening results, as requested.
+
+## Changes
+
+### 1. [stock_tool.py](file:///c:/Users/shunk/.gemini/antigravity/scratch/stock_tool/stock_tool.py)
+- Updated [get_stock_info](file:///c:/Users/shunk/.gemini/antigravity/scratch/stock_tool/stock_tool.py#53-93) to include the `Type` field (fetched from `quoteType` in yfinance).
+- Modified the main execution loop to exclude items where `Type` is `ETF` **only when running in screening mode** (i.e. when fetching all JPX stocks).
+- Added logic to distinguishing between manual mode (user inputs specific tickers) and screening mode.
+
+### 2. [app.py](file:///c:/Users/shunk/.gemini/antigravity/scratch/stock_tool/app.py)
+- Refactored to use the shared `stock_tool.get_stock_info` function instead of a local duplicate.
+- Added a check in the screening loop to skip items where `Type` is `ETF`.
+
+## Verification Results
+
+I created a verification script [verify_filtering.py](file:///c:/Users/shunk/.gemini/antigravity/scratch/stock_tool/verify_filtering.py) to test if [get_stock_info](file:///c:/Users/shunk/.gemini/antigravity/scratch/stock_tool/stock_tool.py#53-93) correctly identifies the `quoteType`.
+
+### Test Output
+```
+Fetching data for: 1321.T...
+PASS: 1321.T identified as ETF
+Fetching data for: 7203.T...
+PASS: 7203.T identified as EQUITY
+Fetching data for: 8951.T...
+PASS: 8951.T identified as EQUITY
+All tests passed.
+```
+
+- **ETF (1321.T)**: Correctly identified as `ETF`.
+- **Stock (7203.T)**: Correctly identified as `EQUITY`.
+- **REIT (8951.T)**: Correctly identified as `EQUITY` (will NOT be filtered out, which is good).
+
+## Conclusion
+
+The system now correctly identifies and filters out ETFs when running the screener in both CLI and Web modes. Manual requests for specific ETF tickers will still work.

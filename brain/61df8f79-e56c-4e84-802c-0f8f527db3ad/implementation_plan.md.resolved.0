@@ -1,0 +1,39 @@
+# Filter out ETFs from Stock Screener
+
+The user reports that ETFs are appearing in the stock screening results and wants them removed.
+I validated that `yfinance` returns `quoteType='ETF'` for ETFs and `quoteType='EQUITY'` for common stocks and REITs.
+I will update the tool to filter out items where `quoteType` is 'ETF' during the screening process.
+
+## User Review Required
+None.
+
+## Proposed Changes
+
+### Stock Tool Logic
+
+#### [MODIFY] [stock_tool.py](file:///c:/Users/shunk/.gemini/antigravity/scratch/stock_tool/stock_tool.py)
+- Update [get_stock_info](file:///c:/Users/shunk/.gemini/antigravity/scratch/stock_tool/stock_tool.py#53-92) to include key `'Type'` with value `info.get('quoteType')`.
+- In [main](file:///c:/Users/shunk/.gemini/antigravity/scratch/stock_tool/app.py#52-190) function, when iterating through tickers:
+    - If the user requested "ALL" tickers (screening mode), skip tickers where `'Type'` is `'ETF'`.
+    - If the user manually specified tickers, do not skip (allow viewing ETF info if explicitly requested).
+
+#### [MODIFY] [app.py](file:///c:/Users/shunk/.gemini/antigravity/scratch/stock_tool/app.py)
+- Remove the duplicate [get_stock_info](file:///c:/Users/shunk/.gemini/antigravity/scratch/stock_tool/stock_tool.py#53-92) function and import/use `stock_tool.get_stock_info` instead.
+- In the screening loop (`search_button` block):
+    - Check `data.get('Type')`.
+    - If it is `'ETF'`, `continue` (skip adding to results).
+    - Update the status text to reflect "Scanning..." without counting it as a "match".
+
+## Verification Plan
+
+### Automated Tests
+- Create a test script `verify_filtering.py` that:
+    - Imports `stock_tool`.
+    - Calls `stock_tool.get_stock_info('1321.T')` (ETF) and asserts `data['Type'] == 'ETF'`.
+    - Calls `stock_tool.get_stock_info('7203.T')` (Toyota) and asserts `data['Type'] == 'EQUITY'`.
+    - Calls `stock_tool.get_stock_info('8951.T')` (REIT) and asserts `data['Type'] == 'EQUITY'`.
+
+### Manual verification
+- Run `python stock_tool.py 1321 7203` (Manual mode). Expect both to be displayed.
+- Run `streamlit run app.py` (if possible, or just review code) and verify logic.
+    - Since I cannot easily interact with the running web app, I will rely on the unit test and code correctness.

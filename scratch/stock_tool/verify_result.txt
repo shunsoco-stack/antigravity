@@ -1,0 +1,10 @@
+--- Checking ETFs ---
+1309.T: Type=ETF, Name=NEXT FUNDS ChinaAMC SSE50 Index Exchange Traded Fund
+1306.T: Type=ETF, Name=NEXT FUNDS TOPIX Exchange Traded Fund
+1321.T: Type=ETF, Name=NEXT FUNDS Nikkei 225 Exchange Traded Fund
+1570.T: Type=ETF, Name=NEXT FUNDS Nikkei 225 Leveraged Index Exchange Traded Fund
+1357.T: Type=ETF, Name=NEXT FUNDS Nikkei 225 Double Inverse Index ETF
+
+--- Checking Stocks ---
+7203.T: Type=EQUITY, Name=Toyota Motor Corporation
+9984.T: Type=EQUITY, Name=SoftBank Group Corp.

@@ -1,0 +1,48 @@
+# 日本株情報取得ツール 作成完了
+
+日本株の情報を取得するCLIツールを作成しました。
+`yfinance` ライブラリを使用しており、リアルタイム（遅延あり）の株価や財務指標を取得できます。
+
+## 作成したファイル
+
+- [stock_tool.py](file:///C:/Users/shunk/.gemini/antigravity/scratch/stock_tool/stock_tool.py): 実行スクリプト
+- [requirements.txt](file:///C:/Users/shunk/.gemini/antigravity/scratch/stock_tool/requirements.txt): 依存ライブラリ一覧
+
+## 機能
+
+- 指定した銘柄コード（複数可）の情報を取得
+- 日本株（4桁コード）に対応（自動で `.T` を付与）
+- 結果をコンソールに表示
+- `--csv` オプションでCSVファイルに保存
+
+## 検証結果
+
+トヨタ自動車 (7203) とソニーグループ (6758) の情報を取得し、CSVに出力するテストを行いました。
+
+### 実行コマンド
+
+```powershell
+python stock_tool.py 7203 6758 --csv output.csv
+```
+
+### 実行結果
+
+```text
+Fetching data for: 7203.T...
+Fetching data for: 6758.T...
+
+--- Results ---
+Symbol                     Name  Current Price  Previous Close     Market Cap  PER (Trailing)      PBR  Dividend Yield Currency
+7203.T Toyota Motor Corporation         3704.0          3714.0 48275667288064       10.476002 1.287622            2.56      JPY
+6758.T   Sony Group Corporation         3839.0          3904.0 22911435931648       19.168165 2.984838            0.64      JPY
+
+Saved to output.csv
+```
+
+## 次のステップ
+
+- 定期的にデータを取得して蓄積する機能の追加
+- 取得項目のカスタマイズ（ROE, 売上高など）
+- 可視化（グラフ描画）機能の追加
+
+などの拡張が可能です。

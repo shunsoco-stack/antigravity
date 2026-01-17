@@ -1,0 +1,5 @@
+{
+  "artifactType": "ARTIFACT_TYPE_WALKTHROUGH",
+  "summary": "Implemented --web flag to allow browser-based visualization via Streamlit.",
+  "updatedAt": "2026-01-17T03:56:42.829558800Z"
+}

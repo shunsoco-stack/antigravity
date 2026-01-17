@@ -1,0 +1,5 @@
+{
+  "artifactType": "ARTIFACT_TYPE_IMPLEMENTATION_PLAN",
+  "summary": "Plan to filter out ETFs from stock screener results by checking `quoteType`.",
+  "updatedAt": "2026-01-17T16:09:52.797148Z"
+}
